@@ -24,7 +24,7 @@ func CreateMongoClient() *MongoClient {
 	ctx := context.TODO()
 
 	//3.创建客户端
-	mongoClient, err := newMongoClient(mongoConfig, ctx)
+	mongoClient, err := NewMongoClient(mongoConfig, ctx)
 	if err != nil {
 		log.Fatalf("mongo create error: %v", err)
 	}

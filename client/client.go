@@ -15,7 +15,7 @@ type MongoClient struct {
 }
 
 // NewMongoClient 创建mongo客户端
-func newMongoClient(config *MongoConfig, ctx context.Context) (*MongoClient, error) {
+func NewMongoClient(config *MongoConfig, ctx context.Context) (*MongoClient, error) {
 
 	//1.创建连接配置项
 	clientOptions := options.Client().ApplyURI(config.Uri).
