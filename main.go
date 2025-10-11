@@ -2,59 +2,12 @@
 package main
 
 import (
-	"context"
-	"log"
 	"mongodb-demo/client"
-	"time"
 )
 
 func main() {
 
 	//1.创建客户端
-	mongoClient := createMongoClient()
-	defer closeMongoClient(mongoClient)
-}
-
-// createMongoClient 创建客户端
-func createMongoClient() *client.MongoClient {
-
-	//1.创建MongoDB配置
-	mongoConfig := &client.MongoConfig{
-		//Uri: "mongodb://myuser:mypassword@localhost:27017/testdb?replicaSet=rs0", //带用户名和密码，以及副本集
-		Uri:            "mongodb://127.0.0.1:27017",
-		MaxPoolSize:    50,
-		MinPoolSize:    5,
-		ConnectTimeout: 10 * time.Second,
-		SocketTimeout:  10 * time.Second,
-	}
-
-	//2.创建上下文
-	ctx := context.TODO()
-
-	//3.创建客户端
-	mongoClient, err := client.NewMongoClient(mongoConfig, ctx)
-	if err != nil {
-		log.Fatalf("mongo create error: %v", err)
-	}
-
-	//4.测试链接
-	err = mongoClient.Ping()
-	if err != nil {
-		log.Fatalf("mongo test connect error: %v", err)
-	}
-
-	//5.打印日志
-	log.Println("mongo client create success")
-
-	//6.返回客户端
-	return mongoClient
-}
-
-// closeMongoClient 关闭客户端
-func closeMongoClient(mongoClient *client.MongoClient) {
-	if err := mongoClient.Close(); err != nil {
-		log.Fatalf("mongo close error: %v", err)
-	} else {
-		log.Println("mongo client close success")
-	}
+	mongoClient := client.CreateMongoClient()
+	defer client.CloseMongoClient(mongoClient)
 }
