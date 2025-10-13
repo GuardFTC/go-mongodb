@@ -16,6 +16,8 @@ func Insert(coll *mongo.Collection, ctx context.Context) {
 	doc1 := bson.D{{"name", "ftc"}, {"age", 18}}
 	doc2 := bson.D{{"name", "zyl"}, {"age", 15}}
 	doc3 := bson.D{{"name", "skx"}, {"age", 18}}
+	doc4 := bson.D{{"name", "wqw"}, {"age", 18}}
+	doc5 := bson.D{{"name", "lulu"}, {"age", 19}}
 
 	//2.insertOne
 	insertOneResult, err := coll.InsertOne(ctx, doc1)
@@ -26,7 +28,7 @@ func Insert(coll *mongo.Collection, ctx context.Context) {
 	}
 
 	//3.insertMany
-	insertManyResult, err := coll.InsertMany(ctx, []interface{}{doc2, doc3})
+	insertManyResult, err := coll.InsertMany(ctx, []interface{}{doc2, doc3, doc4, doc5})
 	if err != nil {
 		log.Printf("insertMany error: %v", err)
 	} else {

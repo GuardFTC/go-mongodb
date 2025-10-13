@@ -40,4 +40,7 @@ func testDocument(collection *mongo.Collection, ctx context.Context) {
 
 	//1.插入文档
 	document.Insert(collection, ctx)
+
+	//2.删除文档
+	document.Delete(collection, ctx)
 }
