@@ -2,6 +2,7 @@
 package main
 
 import (
+	"context"
 	"mongodb-demo/client"
 	"mongodb-demo/db_and_collection"
 	"mongodb-demo/document"
@@ -25,7 +26,7 @@ func main() {
 	collection := db.Collection("testCollection")
 
 	//5.文档操作
-	testDocument(collection, mongoClient)
+	testDocument(collection, mongoClient.GetCtx())
 
 	//6.删除集合
 	db_and_collection.DropCollection(db, mongoClient.GetCtx())
@@ -35,8 +36,8 @@ func main() {
 }
 
 // testDocument 测试文档操作
-func testDocument(collection *mongo.Collection, mongoClient *client.MongoClient) {
+func testDocument(collection *mongo.Collection, ctx context.Context) {
 
 	//1.插入文档
-	document.Insert(collection, mongoClient.GetCtx())
+	document.Insert(collection, ctx)
 }
