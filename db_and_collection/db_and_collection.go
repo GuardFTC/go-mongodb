@@ -10,14 +10,15 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// CreateAndDropDb 创建数据库并删除数据库
-func CreateAndDropDb(client *mongo.Client, ctx context.Context) {
-
-	//1.创建数据库
+// CreateDb 创建数据库
+func CreateDb(client *mongo.Client, ctx context.Context) *mongo.Database {
 	db := client.Database("testDb")
 	log.Printf("创建数据库成功：%s\n", db.Name())
+	return db
+}
 
-	//2.删除数据库
+// DropDb 删除数据库
+func DropDb(client *mongo.Client, ctx context.Context) {
 	err := client.Database("testDb").Drop(ctx)
 	if err != nil {
 		log.Printf("删除数据库失败：%v\n", err)
@@ -26,21 +27,18 @@ func CreateAndDropDb(client *mongo.Client, ctx context.Context) {
 	}
 }
 
-// CreateAndDropCollection 创建集合并删除集合
-func CreateAndDropCollection(client *mongo.Client, ctx context.Context) {
+// CreateCollection 创建集合
+func CreateCollection(db *mongo.Database, ctx context.Context) {
 
-	//1.创建数据库
-	db := client.Database("testDb")
-
-	//2.创建集合
+	//1.创建普通集合
 	err := db.CreateCollection(ctx, "testCollection")
 	if err != nil {
 		log.Printf("创建集合失败：%v\n", err)
 	} else {
-		log.Println("创建集合成功")
+		log.Println("创建普通集合成功")
 	}
 
-	//3.创建一个固定集合
+	//2.创建一个固定大小的集合
 	err = db.CreateCollection(ctx, "testCappedCollection", options.CreateCollection().
 		SetCapped(true).
 		SetSizeInBytes(1024).
@@ -51,7 +49,7 @@ func CreateAndDropCollection(client *mongo.Client, ctx context.Context) {
 		log.Println("创建固定集合成功")
 	}
 
-	//4.列出所有集合
+	//3.列出所有集合
 	collections, err := db.ListCollectionNames(ctx, bson.D{})
 	if err == nil {
 		log.Println("所有集合：")
@@ -59,16 +57,20 @@ func CreateAndDropCollection(client *mongo.Client, ctx context.Context) {
 			log.Println(collection)
 		}
 	}
+}
 
-	//5.删除集合
-	err = db.Collection("testCollection").Drop(ctx)
+// DropCollection 删除集合
+func DropCollection(db *mongo.Database, ctx context.Context) {
+
+	//1.删除普通集合
+	err := db.Collection("testCollection").Drop(ctx)
 	if err != nil {
-		log.Printf("删除集合失败：%v\n", err)
+		log.Printf("删除普通集合失败：%v\n", err)
 	} else {
-		log.Println("删除集合成功")
+		log.Println("删除普通集合成功")
 	}
 
-	//6.删除固定集合
+	//2.删除固定大小集合
 	err = db.Collection("testCappedCollection").Drop(ctx)
 	if err != nil {
 		log.Printf("删除固定集合失败：%v\n", err)

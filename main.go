@@ -4,6 +4,9 @@ package main
 import (
 	"mongodb-demo/client"
 	"mongodb-demo/db_and_collection"
+	"mongodb-demo/document"
+
+	"go.mongodb.org/mongo-driver/mongo"
 )
 
 func main() {
@@ -12,16 +15,28 @@ func main() {
 	mongoClient := client.CreateMongoClient()
 	defer client.CloseMongoClient(mongoClient)
 
-	//2.测试数据库以及集合操作
-	testDbAndCollection(mongoClient)
+	//2.创建数据库
+	db := db_and_collection.CreateDb(mongoClient.GetClient(), mongoClient.GetCtx())
+
+	//3.创建集合
+	db_and_collection.CreateCollection(db, mongoClient.GetCtx())
+
+	//4.获取集合
+	collection := db.Collection("testCollection")
+
+	//5.文档操作
+	testDocument(collection, mongoClient)
+
+	//6.删除集合
+	db_and_collection.DropCollection(db, mongoClient.GetCtx())
+
+	//7.删除数据库
+	db_and_collection.DropDb(mongoClient.GetClient(), mongoClient.GetCtx())
 }
 
-// testDbAndCollection 测试数据库以及集合操作
-func testDbAndCollection(mongoClient *client.MongoClient) {
+// testDocument 测试文档操作
+func testDocument(collection *mongo.Collection, mongoClient *client.MongoClient) {
 
-	//1.创建/删除数据库
-	db_and_collection.CreateAndDropDb(mongoClient.GetClient(), mongoClient.GetCtx())
-
-	//2.创建/删除集合
-	db_and_collection.CreateAndDropCollection(mongoClient.GetClient(), mongoClient.GetCtx())
+	//1.插入文档
+	document.Insert(collection, mongoClient.GetCtx())
 }
