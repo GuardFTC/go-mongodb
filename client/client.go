@@ -46,3 +46,13 @@ func (m *MongoClient) Ping() error {
 func (m *MongoClient) Close() error {
 	return m.client.Disconnect(m.ctx)
 }
+
+// GetClient 获取客户端
+func (m *MongoClient) GetClient() *mongo.Client {
+	return m.client
+}
+
+// GetCtx 获取上下文
+func (m *MongoClient) GetCtx() context.Context {
+	return m.ctx
+}
