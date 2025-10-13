@@ -13,6 +13,11 @@ func main() {
 	defer client.CloseMongoClient(mongoClient)
 
 	//2.测试数据库以及集合操作
+	testDbAndCollection(mongoClient)
+}
+
+// testDbAndCollection 测试数据库以及集合操作
+func testDbAndCollection(mongoClient *client.MongoClient) {
 
 	//1.创建/删除数据库
 	db_and_collection.CreateAndDropDb(mongoClient.GetClient(), mongoClient.GetCtx())
