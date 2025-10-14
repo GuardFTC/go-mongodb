@@ -84,7 +84,11 @@ func SelectByCondition(coll *mongo.Collection, ctx context.Context) {
 	})
 	parseFindManyResult(err, cur, ctx, many, "And With Or Find")
 
-	//10.查询部分字段
+	//10.全量查询
+	cur, err = coll.Find(ctx, bson.D{})
+	parseFindManyResult(err, cur, ctx, many, "All Find")
+
+	//11.查询部分字段
 	cur, err = coll.Find(
 		ctx,
 		bson.D{{"age", 18}},
