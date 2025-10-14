@@ -41,9 +41,13 @@ func testDocument(collection *mongo.Collection, ctx context.Context) {
 	//1.插入文档
 	document.Insert(collection, ctx)
 
-	//2.更新文档
-	document.Update(collection, ctx)
+	//2.查询文档
+	document.SelectOneAndMany(collection, ctx)
+	document.SelectByCondition(collection, ctx)
 
-	//3.删除文档
+	//3.更新文档
+	//document.Update(collection, ctx)
+
+	//4.删除文档
 	document.Delete(collection, ctx)
 }
