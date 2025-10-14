@@ -38,6 +38,28 @@ func Index(coll *mongo.Collection, ctx context.Context) {
 		log.Printf("CreateMany Index success: %v", manyRes)
 	}
 	listIndexes(coll, ctx)
+
+	//4.创建全文索引
+	fullTextRes, err := coll.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys: bson.D{{"name", "text"}},
+	})
+	if err != nil {
+		log.Printf("CreateOne FullText Index error: %v", err)
+	} else {
+		log.Printf("CreateOne FullText Index success: %v", fullTextRes)
+	}
+	listIndexes(coll, ctx)
+
+	//5.创建Hash索引
+	hashRes, err := coll.Indexes().CreateOne(ctx, mongo.IndexModel{
+		Keys: bson.D{{"age", "hashed"}},
+	})
+	if err != nil {
+		log.Printf("CreateOne Hash Index error: %v", err)
+	} else {
+		log.Printf("CreateOne Hash Index success: %v", hashRes)
+	}
+	listIndexes(coll, ctx)
 }
 
 // listIndexes 遍历全部索引
