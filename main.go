@@ -6,6 +6,7 @@ import (
 	"mongodb-demo/client"
 	"mongodb-demo/db_and_collection"
 	"mongodb-demo/document"
+	"mongodb-demo/index"
 
 	"go.mongodb.org/mongo-driver/mongo"
 )
@@ -28,6 +29,9 @@ func main() {
 	//5.文档操作
 	testDocument(collection, mongoClient.GetCtx())
 
+	//6.索引操作
+	index.Index(collection, mongoClient.GetCtx())
+
 	//6.删除集合
 	db_and_collection.DropCollection(db, mongoClient.GetCtx())
 
@@ -48,7 +52,7 @@ func testDocument(collection *mongo.Collection, ctx context.Context) {
 	document.Aggregate(collection, ctx)
 
 	//3.更新文档
-	//document.Update(collection, ctx)
+	document.Update(collection, ctx)
 
 	//4.删除文档
 	document.Delete(collection, ctx)
