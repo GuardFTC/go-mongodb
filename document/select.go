@@ -125,6 +125,83 @@ func SelectSpecial(coll *mongo.Collection, ctx context.Context) {
 	parseFindManyResult(err, cur, ctx, many, "Sort Find")
 }
 
+// Aggregate 聚合查询
+func Aggregate(coll *mongo.Collection, ctx context.Context) {
+
+	//1.获取年龄总和
+	var many bson.A
+	aggregate, err := coll.Aggregate(ctx, bson.A{
+		bson.D{{
+			"$group", bson.M{
+				"_id": "TotalAge",
+				"ageAll": bson.M{
+					"$sum": "$age",
+				},
+			},
+		}},
+	})
+	parseFindManyResult(err, aggregate, ctx, many, "Age Sum")
+
+	//2.获取不同年龄段的人数
+	aggregate, err = coll.Aggregate(ctx, bson.A{
+		bson.D{{
+			"$group", bson.M{
+				"_id": "$age",
+				"count": bson.M{
+					"$sum": 1,
+				},
+			},
+		}},
+	})
+	parseFindManyResult(err, aggregate, ctx, many, "Age Count")
+
+	//3.获取年龄平均值
+	aggregate, err = coll.Aggregate(ctx, bson.A{
+		bson.D{{
+			"$group", bson.M{
+				"_id": "Average",
+				"ageAvg": bson.M{
+					"$avg": "$age",
+				},
+			},
+		}},
+	})
+	parseFindManyResult(err, aggregate, ctx, many, "Age Average")
+
+	//4.获取年龄最大值
+	aggregate, err = coll.Aggregate(ctx, bson.A{
+		bson.D{{
+			"$group", bson.M{
+				"_id": "MaxAge",
+				"ageMax": bson.M{
+					"$max": "$age",
+				},
+			},
+		}},
+	})
+	parseFindManyResult(err, aggregate, ctx, many, "Age Max")
+
+	//5.获取年龄大于17的总人数
+	aggregate, err = coll.Aggregate(ctx, bson.A{
+		bson.D{{
+			"$match", bson.M{
+				"age": bson.M{
+					"$gt": 17,
+				},
+			},
+		}},
+		bson.D{{
+			"$group", bson.M{
+				"_id": "AgeGreaterThan17",
+				"count": bson.M{
+					"$sum": 1,
+				},
+			},
+		}},
+	})
+	parseFindManyResult(err, aggregate, ctx, many, "Age Greater Than 17 Count")
+}
+
 // parseFindManyResult 解析批量查询结果
 func parseFindManyResult(err error, cur *mongo.Cursor, ctx context.Context, many bson.A, title string) {
 	if err != nil {
