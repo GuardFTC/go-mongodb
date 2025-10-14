@@ -101,6 +101,30 @@ func SelectByCondition(coll *mongo.Collection, ctx context.Context) {
 	parseFindManyResult(err, cur, ctx, many, "Partial Field Find")
 }
 
+// SelectSpecial 特殊查询
+func SelectSpecial(coll *mongo.Collection, ctx context.Context) {
+
+	//1.分页查询
+	var many bson.A
+	pageNum := 2
+	pageSize := 2
+	cur, err := coll.Find(ctx, bson.D{}, options.Find().
+		SetSkip(int64((pageNum-1)*pageSize)).
+		SetLimit(int64(pageSize)))
+	parseFindManyResult(err, cur, ctx, many, "Paging Find")
+
+	//2.排序查询
+	cur, err = coll.Find(ctx, bson.D{}, options.Find().
+		SetSort(bson.D{
+			{"age", 1},
+			{"name", -1},
+		}).
+		SetProjection(bson.D{
+			{"_id", 0},
+		}))
+	parseFindManyResult(err, cur, ctx, many, "Sort Find")
+}
+
 // parseFindManyResult 解析批量查询结果
 func parseFindManyResult(err error, cur *mongo.Cursor, ctx context.Context, many bson.A, title string) {
 	if err != nil {

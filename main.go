@@ -44,6 +44,7 @@ func testDocument(collection *mongo.Collection, ctx context.Context) {
 	//2.查询文档
 	document.SelectOneAndMany(collection, ctx)
 	document.SelectByCondition(collection, ctx)
+	document.SelectSpecial(collection, ctx)
 
 	//3.更新文档
 	//document.Update(collection, ctx)
