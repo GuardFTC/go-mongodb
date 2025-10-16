@@ -13,11 +13,11 @@ import (
 func Insert(coll *mongo.Collection, ctx context.Context) {
 
 	//1.创建文档
-	doc1 := bson.D{{"name", "ftc"}, {"age", 18}}
-	doc2 := bson.D{{"name", "zyl"}, {"age", 15}}
-	doc3 := bson.D{{"name", "skx"}, {"age", 18}}
-	doc4 := bson.D{{"name", "wqw"}, {"age", 18}}
-	doc5 := bson.D{{"name", "lulu"}, {"age", 19}}
+	doc1 := bson.D{{"name", "ftc"}, {"age", 18}, {"loginTime", "2025-10-16 15:24:41"}, {"nikeName", "Feng"}}
+	doc2 := bson.D{{"name", "zyl"}, {"age", 15}, {"loginTime", "2025-10-14 15:24:41"}}
+	doc3 := bson.D{{"name", "skx"}, {"age", 18}, {"loginTime", "2025-10-15 15:24:41"}}
+	doc4 := bson.D{{"name", "wqw"}, {"age", 18}, {"loginTime", "2025-10-12 15:24:41"}}
+	doc5 := bson.D{{"name", "lulu"}, {"age", 19}, {"loginTime", "2025-10-11 15:24:41"}, {"nikeName", "SaoLuLu"}}
 
 	//2.insertOne
 	insertOneResult, err := coll.InsertOne(ctx, doc1)
